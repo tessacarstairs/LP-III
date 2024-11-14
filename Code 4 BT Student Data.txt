@@ -1,0 +1,48 @@
+Code 4 BT: Student Data
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentData {
+    // Define a structure for Student
+    struct Student {
+        uint id;
+        string name;
+        uint age;
+    }
+
+    // Array to hold list of students
+    Student[] public students;
+
+    // Mapping to check if a student ID already exists
+    mapping(uint => bool) public studentExists;
+
+    // Function to add a new student
+    function addStudent(uint _id, string memory _name, uint _age) public {
+        // Check if student ID already exists
+        require(!studentExists[_id], "Student with this ID already exists.");
+        
+        // Add student to the array
+        students.push(Student(_id, _name, _age));
+        
+        // Mark student ID as existing
+        studentExists[_id] = true;
+    }
+
+    // Function to get a student by index
+    function getStudent(uint index) public view returns (uint, string memory, uint) {
+        require(index < students.length, "Index out of bounds");
+        Student memory s = students[index];
+        return (s.id, s.name, s.age);
+    }
+
+    // Fallback function to handle unexpected calls
+    fallback() external payable {
+        // Optional: Logic to handle incorrect calls
+    }
+    
+    // Function to get total number of students
+    function getTotalStudents() public view returns (uint) {
+        return students.length;
+    }
+}

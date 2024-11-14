@@ -1,0 +1,39 @@
+Code 2: Huffman code
+
+string = 'aababcdcabadcaabdc'
+
+class Node:
+    def _init_(self, left=None, right=None, char=None, freq=0):
+        self.left = left
+        self.right = right
+        self.char = char
+        self.freq = freq
+
+freq = {}
+for char in string:
+    freq[char] = freq.get(char, 0) + 1
+
+nodes = [Node(char=char,freq=freq) for char,freq in sorted(freq.items(), key=lambda x: x[1])]
+
+while(len(nodes)>1):
+    left = nodes.pop(0)
+    right = nodes.pop(0)
+    newnode = Node(freq=left.freq+right.freq, left=left, right=right)
+    nodes.append(newnode)
+    nodes = sorted(nodes, key=lambda x: x.freq)
+
+def huffman(node, code=''):
+    if(node.char):
+        return {node.char: code}
+    
+    codes = {}
+    codes.update(huffman(node.left, code+'0'))
+    codes.update(huffman(node.right, code+'1'))
+    return codes
+
+huffman_codes = huffman(nodes[0])
+
+print('Char | Huffman')
+print('--------------')
+for char,code in huffman_codes.items():
+    print(f' {char}  |  {code}')

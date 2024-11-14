@@ -1,0 +1,23 @@
+Code 1: Fibonacci Series
+
+def rec(n):
+    if(n<=1):
+        return n
+    else:
+        return(rec(n-1)+rec(n-2))
+
+def fib(n):
+    a=0
+    b=1
+    print(a)
+    print(b)
+    for i in range(2,n):
+        print(a+b)
+        a,b=b,a+b
+
+n = int(input("Enter a number: "))
+print('Recursive: ')
+for i in range(n):
+    print(rec(i))
+print('Non-Recursive: ')
+fib(n)

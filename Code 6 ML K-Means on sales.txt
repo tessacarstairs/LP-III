@@ -1,0 +1,38 @@
+Code 6 ML: K-Means on sales
+
+# Import necessary libraries
+import pandas as pd
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Step 1: Load the dataset
+data = pd.read_csv('sales_data_sample.csv')
+
+# Step 2: Select relevant columns (e.g., numerical columns related to sales)
+# Here, we use 'SALES' as an example; adjust based on the dataset's structure.
+# Drop rows with any missing values in the selected columns
+data = data[['SALES']].dropna()
+
+# Step 3: Use the elbow method to find the optimal number of clusters
+inertia = []  # List to store the sum of squared distances for each k
+
+# Test K from 1 to 10 clusters
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(data)
+    inertia.append(kmeans.inertia_)  # Inertia: sum of squared distances to closest cluster center
+
+# Plot the inertia values for each k
+plt.plot(range(1, 11), inertia, marker='o')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Inertia (Sum of Squared Distances)')
+plt.title('Elbow Method for Optimal k')
+plt.show()
+
+# Step 4: Choose the optimal k (e.g., from the elbow point, let's assume k=3)
+optimal_k = 3
+kmeans = KMeans(n_clusters=optimal_k, random_state=0)
+data['Cluster'] = kmeans.fit_predict(data)  # Assign clusters
+
+# Optional: Display the clustered data
+print(data.head())

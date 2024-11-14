@@ -1,0 +1,46 @@
+Code 5 ML: Diabetes
+
+# Importing necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
+
+# Load the dataset
+url = "https://www.kaggle.com/datasets/abdallamahgoub/diabetes/download"
+df = pd.read_csv(url)
+
+# Select features and target variable
+X = df.drop('Outcome', axis=1)  # Features
+y = df['Outcome']  # Target
+
+# Split dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Feature scaling (important for KNN)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Train the KNN model
+knn = KNeighborsClassifier(n_neighbors=5)  # n_neighbors can be adjusted
+knn.fit(X_train, y_train)
+
+# Make predictions
+y_pred = knn.predict(X_test)
+
+# Evaluate the model
+cm = confusion_matrix(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+
+# Print results
+print("Confusion Matrix:")
+print(cm)
+print(f"Accuracy: {accuracy:.4f}")
+print(f"Error Rate: {error_rate:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")

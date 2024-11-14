@@ -1,0 +1,29 @@
+Code 3: Fractional Knapsack
+
+def frac_knapsack(value, weight, capacity):
+    items = list(zip(value,weight))
+    items.sort(key=lambda x: x[0]/x[1], reverse=True)
+    
+    max_value = 0
+    fraction = [0]*len(value)
+    
+    for i,(v,w) in enumerate(items):
+        if capacity>0:
+            if w<capacity:
+                fraction[i] = 1
+                max_value += v
+                capacity -= w
+            else:
+                fraction[i] = capacity/w
+                max_value += v*fraction[i]
+                break
+    
+    return max_value, fraction
+
+value = [60, 100, 120]
+weight = [10, 20, 30]
+capacity = 50
+
+max_value, fractions = frac_knapsack(value, weight, capacity)
+print("Max value: ",max_value)
+print("Fractions: ",fractions)

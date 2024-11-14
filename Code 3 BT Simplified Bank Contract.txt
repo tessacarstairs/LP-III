@@ -1,0 +1,62 @@
+Code 3 BT: Simplified Bank Contract
+
+// A simple bank contract that allows deposits and withdrawals
+pragma solidity ^0.8.0;
+
+contract Bank {
+
+    // A mapping to store the balance of each account (address -> balance)
+    mapping(address => uint) private balances;
+    
+    // The address of the owner of the contract
+    address public owner;
+
+    // Event to log deposit actions
+    event DepositMade(address accountHolder, uint amount);
+    
+    // Constructor to set the owner of the contract and make an initial deposit of 1000
+    constructor() {
+        owner = msg.sender;
+        emit DepositMade(msg.sender, 1000);  // Logging an initial deposit of 1000
+    }
+
+    // Function to deposit Ether into the contract
+    function deposit() public payable returns (uint) {
+        // Ensure that the deposit is positive and sender is not a zero address
+        require(msg.sender != address(0), "Invalid address");
+        require(balances[msg.sender] + msg.value > balances[msg.sender], "Deposit overflow");
+
+        // Update the balance of the sender
+        balances[msg.sender] += msg.value;
+
+        // Log the deposit event
+        emit DepositMade(msg.sender, msg.value);
+
+        // Return the new balance after deposit
+        return balances[msg.sender];
+    }
+
+    // Function to withdraw Ether from the contract
+    function withdraw(uint amount) public returns (uint) {
+        // Ensure the sender has enough balance for withdrawal
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        require(msg.sender != address(0), "Invalid address");
+
+        // Decrease the balance of the sender
+        balances[msg.sender] -= amount;
+
+        // Transfer the requested amount to the sender
+        payable(msg.sender).transfer(amount);
+
+        // Log the withdrawal event
+        emit DepositMade(msg.sender, amount);
+
+        // Return the updated balance after withdrawal
+        return balances[msg.sender];
+    }
+
+    // Function to view the balance of the caller
+    function viewBalance() public view returns (uint) {
+        return balances[msg.sender];
+    }
+}

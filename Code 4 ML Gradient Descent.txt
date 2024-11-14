@@ -1,0 +1,29 @@
+Code 4 ML: Gradient Descent
+
+import numpy as np
+
+# Gradient Descent function (generalized)
+def gradient_descent(f, grad_f, starting_point, learning_rate, num_iterations):
+    x = starting_point
+    for i in range(num_iterations):
+        grad = grad_f(x)  # Calculate the gradient at current x
+        x = x - learning_rate * grad  # Update the value of x
+        print(f"Iteration {i+1}: x = {x}, f(x) = {f(x)}")  # Print the progress
+    return x
+
+# Example function: f(x) = (x + 3)^2
+def f_example(x):
+    return (x + 3)**2
+
+# Example gradient: derivative of f(x) = (x + 3)^2, which is f'(x) = 2(x + 3)
+def grad_f_example(x):
+    return 2 * (x + 3)
+
+# Parameters for running the algorithm
+starting_point = 2  # Starting point of x
+learning_rate = 0.1  # Step size
+num_iterations = 20  # Number of iterations
+
+# Run Gradient Descent with the example function
+min_x = gradient_descent(f_example, grad_f_example, starting_point, learning_rate, num_iterations)
+print(f"Local minimum occurs at x = {min_x}, f(x) = {f_example(min_x)}")

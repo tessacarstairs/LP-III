@@ -1,0 +1,45 @@
+Code 6 DAA: Quicksort Analysis
+
+import random
+import time
+
+# General Quick Sort with pivot selection method
+def quick_sort(arr, low, high, randomized=False):
+    if low < high:
+        pivot = partition(arr, low, high, randomized)
+        quick_sort(arr, low, pivot - 1, randomized)
+        quick_sort(arr, pivot + 1, high, randomized)
+
+# Partition function (deterministic or randomized pivot)
+def partition(arr, low, high, randomized):
+    if randomized:
+        random_index = random.randint(low, high)
+        arr[random_index], arr[high] = arr[high], arr[random_index]  # Swap with the last element
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1
+
+# Time measurement for sorting
+def measure_time(sort_func, arr, randomized=False):
+    start_time = time.time()
+    sort_func(arr, 0, len(arr) - 1, randomized)
+    return time.time() - start_time
+
+# Test and compare both Quick Sorts
+def analyze_quick_sort(arr):
+    print(f"Array size: {len(arr)}")
+    print(f"Deterministic Quick Sort: {measure_time(quick_sort, arr, randomized=False):.6f} seconds")
+    print(f"Randomized Quick Sort: {measure_time(quick_sort, arr, randomized=True):.6f} seconds")
+
+# Test with different array sizes
+if _name_ == "_main_":
+    sizes = [100, 1000, 5000]
+    for size in sizes:
+        arr = [random.randint(0, 10000) for _ in range(size)]
+        print(f"\nTesting with array of size {size}")
+        analyze_quick_sort(arr)
